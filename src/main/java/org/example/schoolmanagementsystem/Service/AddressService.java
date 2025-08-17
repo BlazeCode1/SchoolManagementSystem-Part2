@@ -42,9 +42,15 @@ public class AddressService {
 
     public void deleteAddress(Integer id){
         Address address = addressRepository.findAddressById(id);
-        if(address == null)
+        if (address == null) {
             throw new ApiException("Address not found");
+        }
 
+        Teacher teacher = address.getTeacher();
+        if (teacher != null) {
+            teacher.setAddress(null);
+            teacherRepository.save(teacher);
+        }
         addressRepository.delete(address);
     }
 
